@@ -70,7 +70,7 @@ try
     $testOutcome    = Get-ActionInput "test-outcome"    $true
     $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
     $workflowRef    = Get-ActionInput "workflow-ref"     $true
-    $sendOnSuccess  = $(Get-ActionInput "send-on-success" $true) -eq "true"
+    $sendOn         = $(Get-ActionInput "send-on" $true) -eq "true"
 
     # Exit if the notification shouldn't be transmitted based on the test step outcome
     # and its success output.  We're going to do a simple string match here rather than 

@@ -50,6 +50,9 @@ inputs:
   test-success:
     description: "The build step's [success] output"
     required: true
+  test-result-uris:
+    description: "List of semicolon separated markdown formatted URIs to the test results"
+    required: true
   workflow-ref:
     description: "The URI to the executing workflow YAML file.  This MUST include the [/blob/master] path segments which will be replaced with the current branch."
     required: true
