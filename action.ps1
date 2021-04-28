@@ -309,7 +309,7 @@ try
 
     # Post the card to Microsoft Teams.
 
-    Invoke-WebRequest -Method "POST" -Uri $channel -ContentType "application/json" -Body $card | Out-Null
+    Invoke-WebRequest -Method "POST" -Uri $channel -ContentType "application/json" -Body $card # | Out-Null
 }
 catch
 {
