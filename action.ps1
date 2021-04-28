@@ -8,26 +8,29 @@
 # formal written and signed agreement with neonFORGE, LLC.
 
 #------------------------------------------------------------------------------
-# Sends a build related notification to a Teams channel.
+# Sends a test related notification message to a Microsoft Teams channel URI.
 #
 # INPUTS:
 #
-#   channel         - Target Teams channel webhook URI
-#   operation       - Identifies what's being built
-#   start-time      - Time when the build started (formatted like YYYY-MM-DD HH-MM:SSZ)
-#   finish-time     - Time when the build completed (formatted like YYYY-MM-DD HH-MM:SSZ)
-#   build-outcome   - Build step outcome, one of: 'success', 'failure', 'cancelled', or 'skipped'
-#   build-success   - Indicates whether the build succeeded or failed
-#   send-on         - Optionally specifies the conditions when a notification can be sent.
-#                     This can be one or more of the following values separated by spaces:
+#   channel             - Target Teams channel webhook URI
+#   start-time          - Time when the tests started (formatted like YYYY-MM-DD HH-MM:SSZ)
+#   finish-time         - Time when the tests completed (formatted like YYYY-MM-DD HH-MM:SSZ)
+#   build-branch        - Indicates which target repo branch was built
+#   build-commit        - Optionally specifies the build commit
+#   build-commit-uri    - Optionally specifies target repo commit URI
+#   test-summary        - Identifies what's being tested
+#   test-outcome        - Test step outcome, one of: 'success', 'failure', 'cancelled', or 'skipped'
+#   test-success        - Indicates whether the tests all succeeded or failed
+#   send-on             - Optionally specifies the conditions when a notification can be sent.
+#                         This can be one or more of the following values separated by spaces:
 #
-#                           always          - send always
-#                           failure         - send when the build step outcome is 'success'
-#                           failure         - send when the build step outcome is 'failure'
-#                           cancelled       - send when the build step outcome is 'cancelled'
-#                           skipped         - send when the build step outcome is 'skipped'
-#                           build-success   - send when the actual build (vs. the step) succeeded
-#                           build-fail      - send when the actual build (vs. the step) failed
+#                               always          - send always
+#                               failure         - send when the build step outcome is 'success'
+#                               failure         - send when the build step outcome is 'failure'
+#                               cancelled       - send when the build step outcome is 'cancelled'
+#                               skipped         - send when the build step outcome is 'skipped'
+#                               test-success    - send when the actual test (vs. the step) succeeded
+#                               test-fail       - send when the actual test (vs. the step) failed
     
 # Verify that we're running on a properly configured neonFORGE jobrunner 
 # and import the deployment and action scripts from neonCLOUD.
@@ -58,32 +61,32 @@ try
     # Fetch the inputs.
 
     $channel        = Get-ActionInput "channel"          $true
-    $operation      = Get-ActionInput "operation"        $true
     $buildBranch    = Get-ActionInput "build-branch"     $false
     $buildCommit    = Get-ActionInput "build-commit"     $false
     $buildCommitUri = Get-ActionInput "build-commit-uri" $false
     $startTime      = Get-ActionInput "start-time"       $false
     $finishTime     = Get-ActionInput "finish-time"      $false
-    $buildOutcome   = Get-ActionInput "build-outcome"    $true
-    $buildSuccess   = $(Get-ActionInput "build-success" $true) -eq "true"
+    $testSummary    = Get-ActionInput "test-summary"     $true
+    $testOutcome    = Get-ActionInput "test-outcome"    $true
+    $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
     $workflowRef    = Get-ActionInput "workflow-ref"     $true
-    $sendOn         = Get-ActionInput "send-on"          $false
+    $sendOnSuccess  = $(Get-ActionInput "send-on-success" $true) -eq "true"
 
-    # Exit if the notification shouldn't be transmitted based on the build outcome
-    # and success.  We're going to do a simple string match here rather than parsing
-    # [send-on].
+    # Exit if the notification shouldn't be transmitted based on the test step outcome
+    # and its success output.  We're going to do a simple string match here rather than 
+    # parsing [send-on].
 
     $sendAlways = $sendOn.Contains("always")
 
-    if (!$sendAlways -and !$sendOn.Contains($buildOutcome))
+    if (!$sendAlways -and !$sendOn.Contains($testOutcome))
     {
-        # Handle the build-success/fail build step result.
+        # Handle the test-success/fail build step result.
 
-        if ($buildSuccess -and $sendOn.Contains("build-success"))
+        if ($buildSuccess -and $sendOn.Contains("test-success"))
         {
             # Send the notification below.
         }
-        elseif (!$buildSuccess -and $sendOn.Contains("build-fail"))
+        elseif (!$buildSuccess -and $sendOn.Contains("test-fail"))
         {
             # Send the notification below.
         }
@@ -181,7 +184,7 @@ try
 
     $themeColor = "ff0000" # green
 
-    Switch ($buildOutcome)
+    Switch ($testOutcome)
     {
         "success"
         {
@@ -206,13 +209,13 @@ try
 
     if (!$buildSuccess)
     {
-        $themeColor   = "ff0000" # red
-        $buildOutcome = "BUILD FAILED"
+        $themeColor  = "ff0000" # red
+        $testOutcome = "TESTS FAILED"
     }
 
-    # Format $buildOutcome
+    # Format $testOutcome
 
-    $buildOutcome = "**$buildOutcome**"
+    $testOutcome = "**$testOutcome**"
 
     # This is the legacy MessageCard format (Adaptive Cards are not supported by
     # the Teams Connector at this time):
@@ -235,7 +238,7 @@ try
             "facts": [
                 {
                     "name": "Outcome:",
-                    "value": "@build-outcome"
+                    "value": "@test-outcome"
                 },
                 {
                     "name": "Branch:",
@@ -275,10 +278,10 @@ try
             "@type": "OpenUri",
             "name": "Show Workflow",
             "targets": [
-            {
+              {
                 "os": "default",
                 "uri": "@workflow-uri"
-            }
+              }
             ]
         }
     ]
@@ -290,7 +293,7 @@ try
     $card = $card.Replace("@runner", $env:COMPUTERNAME)
     $card = $card.Replace("@build-branch", $buildBranch)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
-    $card = $card.Replace("@build-outcome", $buildOutcome.ToUpper())
+    $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
     $card = $card.Replace("@workflow-run-uri", $workflowRunUri)
     $card = $card.Replace("@workflow-uri", $workflowUri)
     $card = $card.Replace("@finish-time", $finishTime)
