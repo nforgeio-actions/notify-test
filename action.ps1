@@ -60,17 +60,19 @@ try
 {    
     # Fetch the inputs.
 
-    $channel        = Get-ActionInput "channel"          $true
-    $buildBranch    = Get-ActionInput "build-branch"     $false
-    $buildCommit    = Get-ActionInput "build-commit"     $false
-    $buildCommitUri = Get-ActionInput "build-commit-uri" $false
-    $startTime      = Get-ActionInput "start-time"       $false
-    $finishTime     = Get-ActionInput "finish-time"      $false
-    $testSummary    = Get-ActionInput "test-summary"     $true
-    $testOutcome    = Get-ActionInput "test-outcome"     $true
-    $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
-    $workflowRef    = Get-ActionInput "workflow-ref"     $true
-    $sendOn         = Get-ActionInput "send-on"          $true
+    $channel             = Get-ActionInput "channel"               $true
+    $buildBranch         = Get-ActionInput "build-branch"          $false
+    $buildCommit         = Get-ActionInput "build-commit"          $false
+    $buildCommitUri      = Get-ActionInput "build-commit-uri"      $false
+    $startTime           = Get-ActionInput "start-time"            $false
+    $finishTime          = Get-ActionInput "finish-time"           $false
+    $testSummary         = Get-ActionInput "test-summary"          $true
+    $testOutcome         = Get-ActionInput "test-outcome"          $true
+    $testSuccess         = $(Get-ActionInput "test-success" $true) -eq "true"
+    $testResultUris      = Get-ActionInput "test-result-uris"      $true
+    $testResultSummaries = Get-ActionInput "test-result-summaries" $true
+    $workflowRef         = Get-ActionInput "workflow-ref"          $true
+    $sendOn              = Get-ActionInput "send-on"               $true
 
     # Exit if the notification shouldn't be transmitted based on the test step outcome
     # and its success output.  We're going to do a simple string match here rather than 
@@ -265,10 +267,7 @@ try
      {
        "startGroup": true,
        "facts": [
-         {
-           "name": "Neon.Cloud.Tests",
-           "value": "[link](https://google.com)"
-         }
+@result-facts
        ]
      }
    ],
@@ -308,6 +307,72 @@ try
     $card = $card.Replace("@finish-time", $finishTime)
     $card = $card.Replace("@elapsed-time", $elapsedTime)
     $card = $card.Replace("@theme-color", $themeColor)
+
+    # Generate the card facts for each of test result if passed to
+    # this action and insert these into the card JSON.
+
+    $okImageUri      = "![ok](https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/ok.png)"
+    $warningImageUri = "![warning]{https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/warning.png)"
+    $errorImageUri   = "![error](https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/error.png)"
+
+    $resultFacts      = ""
+
+    if (![System.String]::IsNullOrEmpty($testResultUris) -and ![System.String]::IsNullOrEmpty($testResultSummaries))
+    {
+        $resultUris       = $testResultUris.Split(";")
+        $resultSummarizes = $testResultSummarizes.Spit(";")
+
+        if ($resultUris.Length -eq $resultSummarizes.Length)
+        {
+            For ($i = 0 ; $i -lt $resultUris.Length ; $i++)
+            {
+                $factTemplate = 
+@'
+         {
+           "name": "@test-project",
+           "value": "@status-uri  @result-uri" pass: @pass fail: @fail skip: @skip
+         }
+'@
+                $factTemplate = $factTemplate.Replace("@result-uri", $resultUris[i])
+
+                # Extract the statistics from the corresponding summary.
+
+                $stats  = $resultSummarizes[i].Split(",")
+                $total  = [int]$stats[0]
+                $errors = [int]$stats[1]
+                $skips  = [int]$stats[2]
+
+                if ($errors -gt 0)
+                {
+                    $statusUri = $errorImageUri
+                }
+                elseif ($skips -gt 0)
+                {
+                    $statusUri = $warningImageUri
+                }
+                else
+                {
+                    $statusUri = $okImageUri
+                }
+
+                # Replace the statistics related fact placeholders.
+
+                $factTemplate = $factTemplate.Replace("@status-uri", $status-uri)
+                $factTemplate = $factTemplate.Replace("@pass", $total - $errors - $skips)
+                $factTemplate = $factTemplate.Replace("@fail", $errors)
+                $factTemplate = $factTemplate.Replace("@skip", $skips)
+
+                # Append the new test fact to the result facts that we'll
+                # insert into the card below.
+
+                $resultFacts += $factTemplate
+            }
+        }
+    }
+
+    # Insert the test result facts into the card.
+
+    $card = $card.Replace("@result-facts", $resultFacts)
 
     # Post the card to Microsoft Teams.
 

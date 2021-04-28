@@ -52,7 +52,10 @@ inputs:
     required: true
   test-result-uris:
     description: "List of semicolon separated markdown formatted URIs to the test results"
-    required: true
+    required: false
+  test-result-summaries:
+    description: "List of semicolon separated test details formatted like: '#tests,#errors,#skips' corresponding to the [test-result-uris]."
+    required: false
   workflow-ref:
     description: "The URI to the executing workflow YAML file.  This MUST include the [/blob/master] path segments which will be replaced with the current branch."
     required: true
