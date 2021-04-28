@@ -308,21 +308,20 @@ try
     $card = $card.Replace("@elapsed-time", $elapsedTime)
     $card = $card.Replace("@theme-color", $themeColor)
 
-    # Generate the card facts for each of test result if passed to
-    # this action and insert these into the card JSON.
+    # Generate the card facts for each of test result (if passed)
+    # to this action and insert these into the card.
 
     $okImageUri      = "![ok](https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/ok.png)"
     $warningImageUri = "![warning]{https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/warning.png)"
     $errorImageUri   = "![error](https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/error.png)"
-
-    $resultFacts      = ""
+    $resultFacts     = ""
 
     if (![System.String]::IsNullOrEmpty($testResultUris) -and ![System.String]::IsNullOrEmpty($testResultSummaries))
     {
-        $resultUris       = $testResultUris.Split(";")
-        $resultSummarizes = $testResultSummarizes.Spit(";")
+        $resultUris      = $testResultUris.Split(";")
+        $resultSummaries = $testResultSummaries.Split(";")
 
-        if ($resultUris.Length -eq $resultSummarizes.Length)
+        if ($resultUris.Length -eq $resultSummaries.Length)
         {
             For ($i = 0 ; $i -lt $resultUris.Length ; $i++)
             {
@@ -337,7 +336,7 @@ try
 
                 # Extract the statistics from the corresponding summary.
 
-                $stats  = $resultSummarizes[i].Split(",")
+                $stats  = $resultSummaries[i].Split(",")
                 $total  = [int]$stats[0]
                 $errors = [int]$stats[1]
                 $skips  = [int]$stats[2]
