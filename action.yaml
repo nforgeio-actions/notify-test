@@ -1,0 +1,68 @@
+#------------------------------------------------------------------------------
+# FILE:         action.yaml
+# CONTRIBUTOR:  Jeff Lill
+# COPYRIGHT:    Copyright (c) 2005-2021 by neonFORGE LLC.  All rights reserved.
+#
+# The contents of this repository are for private use by neonFORGE, LLC. and may not be
+# divulged or used for any purpose by other organizations or individuals without a
+# formal written and signed agreement with neonFORGE, LLC
+
+#------------------------------------------------------------------------------
+# Sends a build related notification message to a Microsoft Teams channel URI.
+#
+# Each sending user sending messages will need a Teams channel URI for each channel
+# being targeted.  This URI identifies the user by name and optionally a profile image
+# and also includes a secret that authenticates the operation.  You can obtain channel
+# URIs by following:
+#
+#   https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using
+#
+# Channel URIs are secrets and should be persisted to the 1Password account for the user
+# and obtained at runtime via the noenFORGE deployment mechanisms.
+
+# IMPLEMENTATION NOTES:
+# ---------------------
+# We're sending actionable cards using the Adaaptive Card message format:
+#
+#   https://adaptivecards.io/
+
+name: teams-notify-build
+description: "Sends a build related message to a Microsoft Teams channel URI"
+inputs:
+  operation:
+    description: "Identifies the build operation being performed"
+    required: true
+  channel:
+    description: "Specifies the target Teams channel URI"
+    required: true
+  build-branch:
+    description: "Indicates which target repo branch was built"
+    required: false
+  build-commit:
+    description: "Optionally specifies the build commit"
+    required: false
+  build-commit-uri:
+    description: "Optionally specifies target repo commit URI"
+    required: false
+  start-time:
+    description: "Optionally indicates when the build started (this must be formatted like: YYYY-MM-DD HH-MM:SSZ)"
+    required: false
+  finish-time:
+    description: "Optionally indicates when the build completed or failed"
+    required: false
+  build-outcome:
+    description: "The build step outcome from [steps.BUILDSTEP.outcome], one of: 'success', 'failure', 'cancelled', or 'skipped'"
+    required: true
+  build-success:
+    description: "The build step's [success] output"
+    required: true
+  workflow-ref:
+    description: "The URI to the executing workflow YAML file.  This MUST include the [/blob/master] path segments which will be replaced with the current branch."
+    required: true
+  send-on:
+    description: "Optionally specifies a space separated list of build outcomes that will trigger the notification or one of: `always`, `build-success`, or `build-fail"
+    required: false
+    default: always
+runs:
+  using: node12
+  main: action.js
