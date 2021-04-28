@@ -1,2 +1,3 @@
 # teams-notify-test
-Sends test completion notifications to a Teams channel
+
+Sends test completion notifications to a Teams channel.
