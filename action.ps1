@@ -67,10 +67,10 @@ try
     $startTime      = Get-ActionInput "start-time"       $false
     $finishTime     = Get-ActionInput "finish-time"      $false
     $testSummary    = Get-ActionInput "test-summary"     $true
-    $testOutcome    = Get-ActionInput "test-outcome"    $true
+    $testOutcome    = Get-ActionInput "test-outcome"     $true
     $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
     $workflowRef    = Get-ActionInput "workflow-ref"     $true
-    $sendOn         = $(Get-ActionInput "send-on" $true) -eq "true"
+    $sendOn         = Get-ActionInput "send-on"          $true)
 
     # Exit if the notification shouldn't be transmitted based on the test step outcome
     # and its success output.  We're going to do a simple string match here rather than 
