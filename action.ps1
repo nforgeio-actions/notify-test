@@ -263,6 +263,7 @@ try
        ]
      },
      {
+       "startGroup": true,
        "facts": [
          {
            "name": "Neon.Cloud.Tests",
