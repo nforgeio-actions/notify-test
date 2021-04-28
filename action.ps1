@@ -155,7 +155,7 @@ try
     $workflowBranch = $githubRef.Substring($lastSlashPos + 1)
     $workflowUri    = $workflowRef.Replace("/blob/master/", "/blob/$workflowBranch/")
 
-    # Determine the reason why the workflow was started based on the GITHUB_EVENT_NAME
+    # Determine the reason why the workflow was triggered based on the GITHUB_EVENT_NAME
     # and GITHUB_ACTOR environment variables.
 
     $event = $env:GITHUB_EVENT_NAME
@@ -173,11 +173,11 @@ try
 
     if ($event -eq "workflow_dispatch")
     {
-        $reason = "Started by: **$actor**"
+        $trigger = "Started by: **$actor**"
     }
     else
     {
-        $reason = "Event trigger: **$event**"
+        $trigger = "Event trigger: **$event**"
     }
 
     # Set the theme color based on the build outcome/success inputs.
@@ -228,11 +228,11 @@ try
   "@type": "MessageCard",
   "@context": "https://schema.org/extensions",
   "themeColor": "@theme-color",
-  "summary": "neon automation",
+  "summary": "@build-summary",
   "sections": [
     {
-      "activityTitle": "@operation",
-      "activitySubtitle": "@reason",
+      "activityTitle": "@test-summary",
+      "activitySubtitle": "@trigger",
     },
     {
       "facts": [
@@ -288,8 +288,8 @@ try
 }    
 '@
 
-    $card = $card.Replace("@operation", $operation)
-    $card = $card.Replace("@reason", $reason)
+    $card = $card.Replace("@test-summary", $testSummary)
+    $card = $card.Replace("@trigger", $trigger)
     $card = $card.Replace("@runner", $env:COMPUTERNAME)
     $card = $card.Replace("@build-branch", $buildBranch)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
