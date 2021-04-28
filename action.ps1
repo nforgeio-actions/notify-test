@@ -57,7 +57,7 @@ Pop-Location
 # Implement the operation.
 
 try
-{      
+{    
     # Fetch the inputs.
 
     $channel        = Get-ActionInput "channel"          $true
@@ -70,7 +70,7 @@ try
     $testOutcome    = Get-ActionInput "test-outcome"     $true
     $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
     $workflowRef    = Get-ActionInput "workflow-ref"     $true
-    $sendOn         = Get-ActionInput "send-on"          $true)
+    $sendOn         = Get-ActionInput "send-on"          $true
 
     # Exit if the notification shouldn't be transmitted based on the test step outcome
     # and its success output.  We're going to do a simple string match here rather than 
@@ -82,11 +82,11 @@ try
     {
         # Handle the test-success/fail build step result.
 
-        if ($buildSuccess -and $sendOn.Contains("test-success"))
+        if ($testSuccess -and $sendOn.Contains("test-success"))
         {
             # Send the notification below.
         }
-        elseif (!$buildSuccess -and $sendOn.Contains("test-fail"))
+        elseif (!$testSuccess -and $sendOn.Contains("test-fail"))
         {
             # Send the notification below.
         }
@@ -158,26 +158,26 @@ try
     # Determine the reason why the workflow was triggered based on the GITHUB_EVENT_NAME
     # and GITHUB_ACTOR environment variables.
 
-    $event = $env:GITHUB_EVENT_NAME
-    $actor = $env:GITHUB_ACTOR
+    $eventName = $env:GITHUB_EVENT_NAME
+    $actor     = $env:GITHUB_ACTOR
 
     if (![System.String]::IsNullOrEmpty($actor))
     {
         $actor = $actor.ToUpper()
     }
 
-    if (![System.String]::IsNullOrEmpty($event))
+    if (![System.String]::IsNullOrEmpty($eventName))
     {
-        $event = $event.ToUpper()
+        $eventName = $eventName.ToUpper()
     }
 
-    if ($event -eq "workflow_dispatch")
+    if ($eventName -eq "workflow_dispatch")
     {
         $trigger = "Started by: **$actor**"
     }
     else
     {
-        $trigger = "Event trigger: **$event**"
+        $trigger = "Event trigger: **$eventName**"
     }
 
     # Set the theme color based on the build outcome/success inputs.
@@ -207,7 +207,7 @@ try
         }
     }
 
-    if (!$buildSuccess)
+    if (!$testSuccess)
     {
         $themeColor  = "ff0000" # red
         $testOutcome = "TESTS FAILED"
