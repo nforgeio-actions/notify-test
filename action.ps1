@@ -268,10 +268,10 @@ try
             "@type": "OpenUri",
             "name": "Show Workflow Run",
             "targets": [
-            {
+              {
                 "os": "default",
                 "uri": "@workflow-run-uri"
-            }
+              }
             ]
         },
         {
