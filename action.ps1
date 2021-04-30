@@ -361,13 +361,6 @@ try
                     $statusUri = $okStatus
                 }
 
-                # $todo(jefflill):
-                #
-                # The Teams connector doesn't appear to support markdown image URIs, so we'll
-                # clear this for now.  Perhaps we can resurect this in the future.
-
-                $statusUri = "$okStatus $warningStatus $errorStatus"
-
                 # Replace the statistics related fact placeholders.
 
                 $factTemplate = $factTemplate.Replace("@status-uri", $statusUri)
