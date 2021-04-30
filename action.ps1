@@ -244,6 +244,10 @@ try
            "value": "@test-outcome"
          },
          {
+           "name": "Filter:",
+           "value": "@filter"
+         },
+         {
            "name": "Branch:",
            "value": "@build-branch"
          },
@@ -300,6 +304,7 @@ try
     $card = $card.Replace("@test-summary", $testSummary)
     $card = $card.Replace("@trigger", $trigger)
     $card = $card.Replace("@runner", $env:COMPUTERNAME)
+    $card = $card.Replace("@filter", $filter)
     $card = $card.Replace("@build-branch", $buildBranch)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
     $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
@@ -391,7 +396,7 @@ try
 @'
             {
               "name": "Results:",
-              "value": "**none** (all tests may have been filtered out)"
+              "value": "**none** (no available test results)"
             }
 '@
         $resultFacts += $noResultsFact
