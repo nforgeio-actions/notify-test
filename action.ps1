@@ -330,7 +330,7 @@ try
          {
            "name": "@test-project",
            "value": "@status-uri  @result-uri" pass: @pass fail: @fail skip: @skip
-         }
+         },
 '@
                 $factTemplate = $factTemplate.Replace("@result-uri", $resultUris[$i])
 
@@ -372,10 +372,6 @@ try
     # Insert the test result facts into the card.
 
     $card = $card.Replace("@result-facts", $resultFacts)
-
-    Write-ActionOutput "*******************************************"
-    Write-ActionOutput $card
-    Write-ActionOutput "*******************************************"
 
     # Post the card to Microsoft Teams.
 
