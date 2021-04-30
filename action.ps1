@@ -311,10 +311,10 @@ try
     # Generate the card facts for each of test result (if passed)
     # to this action and insert these into the card.
 
-    $okImageUri      = "![ok](https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/ok.png)"
-    $warningImageUri = "![warning]{https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/warning.png)"
-    $errorImageUri   = "![error](https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/error.png)"
-    $resultFacts     = ""
+    $okStatus      = "`u{2714}"     # heavy checkmark
+    $warningStatus = "`u{26A0}"     # warning sign
+    $errorStatus   = "`u{274C}"     # error cross
+    $resultFacts   = ""
 
     if (![System.String]::IsNullOrEmpty($testResultUris) -and ![System.String]::IsNullOrEmpty($testResultInfo))
     {
@@ -366,7 +366,7 @@ try
                 # The Teams connector doesn't appear to support markdown image URIs, so we'll
                 # clear this for now.  Perhaps we can resurect this in the future.
 
-                $statusUri = ""
+                $statusUri = "$okStatus $warningStatus $errorStatus"
 
                 # Replace the statistics related fact placeholders.
 
