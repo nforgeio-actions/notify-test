@@ -391,7 +391,7 @@ try
 @'
             {
               "name": "Results:",
-              "value": "-na- (all tests may have been filtered out)"
+              "value": "**none** (all tests may have been filtered out)"
             }
 '@
         $resultFacts += $noResultsFact
