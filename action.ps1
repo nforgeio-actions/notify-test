@@ -327,17 +327,14 @@ try
             {
                 $resultUri = $resultUris[$i]
 
-                # Extract the project name from the result URI text.
-
-                $rightBracketPos = $resultUri.IndexOf("]")
-                $projectName     = $resultUri.Substring(1, $rightBracketPos - 1)
-
                 # Extract the statistics from the corresponding summary.
 
-                $stats  = $resultInfo[$i].Split(",")
-                $total  = [int]$stats[0]
-                $errors = [int]$stats[1]
-                $skips  = [int]$stats[2]
+                $details = $resultInfo[$i].Split(",")
+                $name    = $details[0]
+                $total   = [int]$details[1]
+                $errors  = [int]$details[2]
+                $skips   = [int]$details[3]
+                $elapsed = $details[4]
 
                 # Initialize the fact JSON for the test project.
 
@@ -345,10 +342,10 @@ try
 @'
          {
            "name": "@test-project",
-           "value": "@status-uri @result-uri [ **pass:** @pass **fail:** @fail **skipped:** @skip ]"
+           "value": "@status-uri @result-uri [ pass: **@pass** fail: **@fail** skipped: **@skip** ]"
          }
 '@
-                $factTemplate = $factTemplate.Replace("@test-project", $projectName)
+                $factTemplate = $factTemplate.Replace("@test-project", $name)
                 $factTemplate = $factTemplate.Replace("@result-uri", $resultUri)
 
                 if ($errors -gt 0)
