@@ -9,28 +9,6 @@
 
 #------------------------------------------------------------------------------
 # Sends a test related notification message to a Microsoft Teams channel URI.
-#
-# INPUTS:
-#
-#   channel             - Target Teams channel webhook URI
-#   start-time          - Time when the tests started (formatted like YYYY-MM-DD HH-MM:SSZ)
-#   finish-time         - Time when the tests completed (formatted like YYYY-MM-DD HH-MM:SSZ)
-#   build-branch        - Indicates which target repo branch was built
-#   build-commit        - Optionally specifies the build commit
-#   build-commit-uri    - Optionally specifies target repo commit URI
-#   test-summary        - Identifies what's being tested
-#   test-outcome        - Test step outcome, one of: 'success', 'failure', 'cancelled', or 'skipped'
-#   test-success        - Indicates whether the tests all succeeded or failed
-#   send-on             - Optionally specifies the conditions when a notification can be sent.
-#                         This can be one or more of the following values separated by spaces:
-#
-#                               always          - send always
-#                               failure         - send when the build step outcome is 'success'
-#                               failure         - send when the build step outcome is 'failure'
-#                               cancelled       - send when the build step outcome is 'cancelled'
-#                               skipped         - send when the build step outcome is 'skipped'
-#                               test-success    - send when the actual test (vs. the step) succeeded
-#                               test-fail       - send when the actual test (vs. the step) failed
     
 # Verify that we're running on a properly configured neonFORGE jobrunner 
 # and import the deployment and action scripts from neonCLOUD.
@@ -62,6 +40,7 @@ try
 
     $channel        = Get-ActionInput "channel"          $true
     $buildBranch    = Get-ActionInput "build-branch"     $false
+    $buildConfig    = Get-ActionInput "build-config"     $false
     $buildCommit    = Get-ActionInput "build-commit"     $false
     $buildCommitUri = Get-ActionInput "build-commit-uri" $false
     $startTime      = Get-ActionInput "start-time"       $false
@@ -74,6 +53,11 @@ try
     $testResultInfo = Get-ActionInput "test-result-info" $false
     $workflowRef    = Get-ActionInput "workflow-ref"     $true
     $sendOn         = Get-ActionInput "send-on"          $true
+
+    if ([System.String]::IsNullOrEmpty($buildConfig))
+    {
+        $buildConfig = "-na-"
+    }
 
     if ([System.String]::IsNullOrEmpty($testFilter))
     {
@@ -253,6 +237,10 @@ try
            "value": "@build-branch"
          },
          {
+           "name": "Config:",
+           "value": "@build-config"
+         },
+         {
            "name": "Filter:",
            "value": "@test-filter"
          },
@@ -309,9 +297,10 @@ try
     $card = $card.Replace("@trigger", $trigger)
     $card = $card.Replace("@runner", $env:COMPUTERNAME)
     $card = $card.Replace("@build-branch", $buildBranch)
-    $card = $card.Replace("@test-filter", $testFilter)
+    $card = $card.Replace("@build-config", $buildConfig)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
     $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
+    $card = $card.Replace("@test-filter", $testFilter)
     $card = $card.Replace("@workflow-run-uri", $workflowRunUri)
     $card = $card.Replace("@workflow-uri", $workflowUri)
     $card = $card.Replace("@finish-time", $finishTime)

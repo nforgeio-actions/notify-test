@@ -27,7 +27,10 @@ inputs:
     description: "Specifies the target Teams channel URI"
     required: true
   build-branch:
-    description: "Indicates which target repo branch was built"
+    description: "Optionally indicates which target repo branch was built"
+    required: false
+  build-config:
+    description: "Optionally indicates the build/test configuration"
     required: false
   build-commit:
     description: "Optionally specifies the build commit"
