@@ -342,7 +342,7 @@ try
 @'
          {
            "name": "@test-project:",
-           "value": "@status-uri **@result-uri** [ elapsed: @elapsed pass: **@pass** fail: **@fail** skipped: @skip ]"
+           "value": "@status-uri **@result-uri** [ @elapsed pass: **@pass** fail: **@fail** skipped: @skip ]"
          }
 '@
                 $factTemplate = $factTemplate.Replace("@test-project", $name)
