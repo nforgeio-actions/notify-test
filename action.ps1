@@ -386,8 +386,6 @@ try
 
     $card = $card.Replace("@result-facts", $resultFacts)
 
-    [System.IO.File]::WriteAllText("C:\Temp\card.json", $card)
-
     # Post the card to Microsoft Teams.
 
     Invoke-WebRequest -Method "POST" -Uri $channel -ContentType "application/json" -Body $card | Out-Null
