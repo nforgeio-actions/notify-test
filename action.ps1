@@ -58,6 +58,10 @@ try
     {
         $buildConfig = "-na-"
     }
+    else
+    {
+        $buildConfig = $buildConfig.ToLower()
+    }
 
     if ([System.String]::IsNullOrEmpty($testFilter))
     {
