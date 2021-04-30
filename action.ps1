@@ -311,9 +311,9 @@ try
     # Generate the card facts for each of test result (if passed)
     # to this action and insert these into the card.
 
-    $okStatus      = "`u{2714}"     # heavy checkmark
-    $warningStatus = "`u{26A0}"     # warning sign
-    $errorStatus   = "`u{274C}"     # error cross
+    $okStatus      = "\u2714"       # heavy checkmark (JSON encoded)
+    $warningStatus = "\u26A0"       # warning sign (JSON encoded)
+    $errorStatus   = "\u274C"       # error cross (JSON encoded)
     $resultFacts   = ""
 
     if (![System.String]::IsNullOrEmpty($testResultUris) -and ![System.String]::IsNullOrEmpty($testResultInfo))
