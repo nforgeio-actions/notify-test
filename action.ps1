@@ -356,7 +356,7 @@ try
 
                 # Replace the statistics related fact placeholders.
 
-                $factTemplate = $factTemplate.Replace("@status-uri", $status-uri)
+                $factTemplate = $factTemplate.Replace("@status-uri", $statusUri)
                 $factTemplate = $factTemplate.Replace("@pass", $total - $errors - $skips)
                 $factTemplate = $factTemplate.Replace("@fail", $errors)
                 $factTemplate = $factTemplate.Replace("@skip", $skips)
