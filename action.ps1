@@ -342,7 +342,7 @@ try
 @'
          {
            "name": "@test-project",
-           "value": "@status-uri @result-uri [ pass: **@pass** fail: **@fail** skipped: **@skip** ]"
+           "value": "@status-uri @result-uri [ elapsed: **@elapsed** pass: **@pass** fail: **@fail** skipped: **@skip** ]"
          }
 '@
                 $factTemplate = $factTemplate.Replace("@test-project", $name)
@@ -364,6 +364,7 @@ try
                 # Replace the statistics related fact placeholders.
 
                 $factTemplate = $factTemplate.Replace("@status-uri", $statusUri)
+                $factTemplate = $factTemplate.Replace("@elapsed", $elapsed)
                 $factTemplate = $factTemplate.Replace("@pass", $total - $errors - $skips)
                 $factTemplate = $factTemplate.Replace("@fail", $errors)
                 $factTemplate = $factTemplate.Replace("@skip", $skips)
