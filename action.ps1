@@ -373,6 +373,10 @@ try
 
     $card = $card.Replace("@result-facts", $resultFacts)
 
+    Write-ActionOutput "*******************************************"
+    Write-ActionOutput $card
+    Write-ActionOutput "*******************************************"
+
     # Post the card to Microsoft Teams.
 
     Invoke-WebRequest -Method "POST" -Uri $channel -ContentType "application/json" -Body $card | Out-Null
