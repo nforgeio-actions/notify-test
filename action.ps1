@@ -380,7 +380,7 @@ try
 
                 if (![System.String]::IsNullOrEmpty($resultFacts))
                 {
-                    $factTemplate += ","
+                    $factTemplate = ",`r`n" + $factTemplate
                 }
 
                 $resultFacts += $factTemplate
