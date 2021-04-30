@@ -341,7 +341,7 @@ try
                 $factTemplate = 
 @'
          {
-           "name": "@test-project",
+           "name": "@test-project:",
            "value": "@status-uri **@result-uri** [ elapsed: @elapsed pass: **@pass** fail: **@fail** skipped: @skip ]"
          }
 '@
@@ -350,15 +350,15 @@ try
 
                 if ($errors -gt 0)
                 {
-                    $statusUri = $errorImageUri
+                    $statusUri = $errorStatus
                 }
                 elseif ($skips -gt 0)
                 {
-                    $statusUri = $warningImageUri
+                    $statusUri = $warningStatus
                 }
                 else
                 {
-                    $statusUri = $okImageUri
+                    $statusUri = $okStatus
                 }
 
                 # $todo(jefflill):
