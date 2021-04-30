@@ -330,7 +330,7 @@ try
          {
            "name": "@test-project",
            "value": "@status-uri  @result-uri" pass: @pass fail: @fail skip: @skip
-         },
+         }
 '@
                 $factTemplate = $factTemplate.Replace("@result-uri", $resultUris[$i])
 
@@ -363,6 +363,11 @@ try
 
                 # Append the new test fact to the result facts that we'll
                 # insert into the card below.
+
+                if ($i < $resultUris.Length - 1)
+                {
+                    $factTemplate += ","
+                }
 
                 $resultFacts += $factTemplate
             }
