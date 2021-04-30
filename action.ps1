@@ -408,7 +408,7 @@ try
 
     # $debug(jefflill): DELETE THIS!
 
-    [System.IO.File]::WriteAllText("C:\Temp\card.json", $card")
+    [System.IO.File]::WriteAllText("C:\Temp\card.json", $card)
 
     # Post the card to Microsoft Teams.
 
