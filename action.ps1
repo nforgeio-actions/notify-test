@@ -60,19 +60,19 @@ try
 {    
     # Fetch the inputs.
 
-    $channel             = Get-ActionInput "channel"               $true
-    $buildBranch         = Get-ActionInput "build-branch"          $false
-    $buildCommit         = Get-ActionInput "build-commit"          $false
-    $buildCommitUri      = Get-ActionInput "build-commit-uri"      $false
-    $startTime           = Get-ActionInput "start-time"            $false
-    $finishTime          = Get-ActionInput "finish-time"           $false
-    $testSummary         = Get-ActionInput "test-summary"          $true
-    $testOutcome         = Get-ActionInput "test-outcome"          $true
-    $testSuccess         = $(Get-ActionInput "test-success" $true) -eq "true"
-    $testResultUris      = Get-ActionInput "test-result-uris"      $true
-    $testResultSummaries = Get-ActionInput "test-result-summaries" $true
-    $workflowRef         = Get-ActionInput "workflow-ref"          $true
-    $sendOn              = Get-ActionInput "send-on"               $true
+    $channel        = Get-ActionInput "channel"          $true
+    $buildBranch    = Get-ActionInput "build-branch"     $false
+    $buildCommit    = Get-ActionInput "build-commit"     $false
+    $buildCommitUri = Get-ActionInput "build-commit-uri" $false
+    $startTime      = Get-ActionInput "start-time"       $false
+    $finishTime     = Get-ActionInput "finish-time"      $false
+    $testSummary    = Get-ActionInput "test-summary"     $true
+    $testOutcome    = Get-ActionInput "test-outcome"     $true
+    $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
+    $testResultUris = Get-ActionInput "test-result-uris" $false
+    $testResultInfo = Get-ActionInput "test-result-info" $false
+    $workflowRef    = Get-ActionInput "workflow-ref"     $true
+    $sendOn         = Get-ActionInput "send-on"          $true
 
     # Exit if the notification shouldn't be transmitted based on the test step outcome
     # and its success output.  We're going to do a simple string match here rather than 
@@ -316,12 +316,12 @@ try
     $errorImageUri   = "![error](https://raw.githubusercontent.com/nforgeio-actions/images/master/teams/error.png)"
     $resultFacts     = ""
 
-    if (![System.String]::IsNullOrEmpty($testResultUris) -and ![System.String]::IsNullOrEmpty($testResultSummaries))
+    if (![System.String]::IsNullOrEmpty($testResultUris) -and ![System.String]::IsNullOrEmpty($testResultInfo))
     {
-        $resultUris      = $testResultUris.Split(";")
-        $resultSummaries = $testResultSummaries.Split(";")
+        $resultUris = $testResultUris.Split(";")
+        $resultInfo = $testResultInfo.Split(";")
 
-        if ($resultUris.Length -eq $resultSummaries.Length)
+        if ($resultUris.Length -eq $resultInfo.Length)
         {
             For ($i = 0 ; $i -lt $resultUris.Length ; $i++)
             {
@@ -336,7 +336,7 @@ try
 
                 # Extract the statistics from the corresponding summary.
 
-                $stats  = $resultSummaries[$i].Split(",")
+                $stats  = $resultInfo[$i].Split(",")
                 $total  = [int]$stats[0]
                 $errors = [int]$stats[1]
                 $skips  = [int]$stats[2]

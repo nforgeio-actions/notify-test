@@ -53,7 +53,7 @@ inputs:
   test-result-uris:
     description: "List of semicolon separated markdown formatted URIs to the test results"
     required: false
-  test-result-summaries:
+  test-result-info:
     description: "List of semicolon separated test details formatted like: '#tests,#errors,#skips' corresponding to the [test-result-uris]."
     required: false
   workflow-ref:
