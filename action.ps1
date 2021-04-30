@@ -348,7 +348,7 @@ try
 
                 # Skip projects that performed no tests.
 
-                if ($total == 0)
+                if ($total -eq 0)
                 {
                     Continue
                 }
