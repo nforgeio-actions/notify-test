@@ -332,7 +332,7 @@ try
            "value": "@status-uri  @result-uri" pass: @pass fail: @fail skip: @skip
          }
 '@
-                $factTemplate = $factTemplate.Replace("@result-uri", $resultUris[i])
+                $factTemplate = $factTemplate.Replace("@result-uri", $resultUris[$i])
 
                 # Extract the statistics from the corresponding summary.
 
