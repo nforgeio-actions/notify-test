@@ -342,7 +342,7 @@ try
 @'
          {
            "name": "@test-project",
-           "value": "@status-uri @result-uri [ elapsed: **@elapsed** pass: **@pass** fail: **@fail** skipped: **@skip** ]"
+           "value": "@status-uri **@result-uri** [ elapsed: @elapsed pass: **@pass** fail: **@fail** skipped: @skip ]"
          }
 '@
                 $factTemplate = $factTemplate.Replace("@test-project", $name)
@@ -360,6 +360,13 @@ try
                 {
                     $statusUri = $okImageUri
                 }
+
+                # $todo(jefflill):
+                #
+                # The Teams connector doesn't appear to support markdown image URIs, so we'll
+                # clear this for now.  Perhaps we can resurect this in the future.
+
+                $statusUri = ""
 
                 # Replace the statistics related fact placeholders.
 
