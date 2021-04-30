@@ -364,7 +364,7 @@ try
                 # Append the new test fact to the result facts that we'll
                 # insert into the card below.
 
-                if ($i < $resultUris.Length - 1)
+                if ($i -lt $resultUris.Length - 1)
                 {
                     $factTemplate += ","
                 }
