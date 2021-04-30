@@ -336,7 +336,7 @@ try
 
                 # Extract the statistics from the corresponding summary.
 
-                $stats  = $resultSummaries[i].Split(",")
+                $stats  = $resultSummaries[$i].Split(",")
                 $total  = [int]$stats[0]
                 $errors = [int]$stats[1]
                 $skips  = [int]$stats[2]
