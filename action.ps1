@@ -75,6 +75,11 @@ try
     $workflowRef    = Get-ActionInput "workflow-ref"     $true
     $sendOn         = Get-ActionInput "send-on"          $true
 
+    if ([System.String]::IsNullOrEmpty($testFilter))
+    {
+        $testFilter = "-na-"
+    }
+
     # Exit if the notification shouldn't be transmitted based on the test step outcome
     # and its success output.  We're going to do a simple string match here rather than 
     # parsing [send-on].
@@ -244,12 +249,12 @@ try
            "value": "@test-outcome"
          },
          {
-           "name": "Filter:",
-           "value": "@filter"
-         },
-         {
            "name": "Branch:",
            "value": "@build-branch"
+         },
+         {
+           "name": "Filter:",
+           "value": "@test-filter"
          },
          {
            "name": "Commit:",
@@ -300,12 +305,11 @@ try
    ]
 }    
 '@
-
     $card = $card.Replace("@test-summary", $testSummary)
     $card = $card.Replace("@trigger", $trigger)
     $card = $card.Replace("@runner", $env:COMPUTERNAME)
-    $card = $card.Replace("@filter", $filter)
     $card = $card.Replace("@build-branch", $buildBranch)
+    $card = $card.Replace("@test-filter", $testFilter)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
     $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
     $card = $card.Replace("@workflow-run-uri", $workflowRunUri)
