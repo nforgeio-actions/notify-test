@@ -346,6 +346,13 @@ try
                 $skips   = [int]$details[3]
                 $elapsed = $details[4]
 
+                # Skip projects that performed no tests.
+
+                if ($total == 0)
+                {
+                    Continue
+                }
+
                 # Initialize the fact JSON for the test project.
 
                 $factTemplate = 
@@ -382,7 +389,7 @@ try
                 # Append the new test fact to the result facts that we'll
                 # insert into the card below.
 
-                if ($i -lt $resultUris.Length - 1)
+                if (![System.String]::IsNullOrEmpty($resultFacts))
                 {
                     $factTemplate += ","
                 }
