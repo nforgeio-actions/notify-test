@@ -373,7 +373,7 @@ try
 
     $card = $card.Replace("@result-facts", $resultFacts)
 
-    [System.IO.File].WriteAllText("C:\Temp\card.json", $card)
+    [System.IO.File]::WriteAllText("C:\Temp\card.json", $card)
 
     # Post the card to Microsoft Teams.
 
