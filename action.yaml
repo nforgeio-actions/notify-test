@@ -50,6 +50,10 @@ inputs:
   test-success:
     description: "The build step's [success] output"
     required: true
+  test-filter:
+    description: "The test filter used (if any)"
+    required: false
+    default: ""
   test-result-uris:
     description: "List of semicolon separated markdown formatted URIs to the test results"
     required: false

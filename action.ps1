@@ -69,6 +69,7 @@ try
     $testSummary    = Get-ActionInput "test-summary"     $true
     $testOutcome    = Get-ActionInput "test-outcome"     $true
     $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
+    $testFilter     = Get-ActionInput "test-filter"      $false
     $testResultUris = Get-ActionInput "test-result-uris" $false
     $testResultInfo = Get-ActionInput "test-result-info" $false
     $workflowRef    = Get-ActionInput "workflow-ref"     $true
