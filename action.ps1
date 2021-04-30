@@ -342,7 +342,7 @@ try
 @'
          {
            "name": "@test-project:",
-           "value": "@status-uri **@result-uri** [ @elapsed pass: **@pass** fail: **@fail** skipped: @skip ]"
+           "value": "@status-uri **@result-uri** - @elapsed pass: **@pass** fail: **@fail** skipped: @skip"
          }
 '@
                 $factTemplate = $factTemplate.Replace("@test-project", $name)
@@ -379,6 +379,20 @@ try
 
                 $resultFacts += $factTemplate
             }
+        }
+        else
+        {
+            # We didn't get any results from the test step, so we'll add
+            # fact saying this.
+
+            $noResultsFact =
+@'
+         {
+           "name": "Results:",
+           "value": "-na- (all tests may have been filtered out)"
+         }
+'@
+            $resultFacts += $noResultsFact
         }
     }
 
