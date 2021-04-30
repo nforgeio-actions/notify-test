@@ -380,20 +380,20 @@ try
                 $resultFacts += $factTemplate
             }
         }
-        else
-        {
-            # We didn't get any results from the test step, so we'll add
-            # fact saying this.
+    }
+    else
+    {
+        # We didn't get any results from the test step, so we'll add
+        # fact saying this.
 
-            $noResultsFact =
+        $noResultsFact =
 @'
-         {
-           "name": "Results:",
-           "value": "-na- (all tests may have been filtered out)"
-         }
+            {
+              "name": "Results:",
+              "value": "-na- (all tests may have been filtered out)"
+            }
 '@
-            $resultFacts += $noResultsFact
-        }
+        $resultFacts += $noResultsFact
     }
 
     # Insert the test result facts into the card.
