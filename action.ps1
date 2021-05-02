@@ -49,7 +49,6 @@ $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
 $testFilter     = Get-ActionInput "test-filter"      $false
 $testResultUris = Get-ActionInput "test-result-uris" $false
 $testResultInfo = Get-ActionInput "test-result-info" $false
-$workflowRef    = Get-ActionInput "workflow-ref"     $true
 $sendOn         = Get-ActionInput "send-on"          $true
 
 try
@@ -130,9 +129,10 @@ try
         $elapsedTime = $(New-TimeSpan $startTime $finishTime).ToString("c")
     }
 
-    # Determine the workflow run URI.
+    # Fetch the workflow and run run URIs.
 
-    $workflowRunUri = "$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+    $workflowUri    = Get-WorkflowUri $env:workflow-path
+    $workflowRunUri = Get-WorkflowRunUri
 
     # Determine the reason why the workflow was triggered based on the GITHUB_EVENT_NAME
     # and GITHUB_ACTOR environment variables.
@@ -288,8 +288,8 @@ try
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
     $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
     $card = $card.Replace("@test-filter", $testFilter)
-    $card = $card.Replace("@workflow-run-uri", $(Get-WorkflowRunUri))
-    $card = $card.Replace("@workflow-uri", $(Get-WorkflowUri))
+    $card = $card.Replace("@workflow-run-uri", $workflowRunUri)
+    $card = $card.Replace("@workflow-uri", $workflowUri)
     $card = $card.Replace("@finish-time", $finishTime)
     $card = $card.Replace("@elapsed-time", $elapsedTime)
     $card = $card.Replace("@theme-color", $themeColor)

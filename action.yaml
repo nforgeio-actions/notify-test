@@ -63,9 +63,6 @@ inputs:
   test-result-info:
     description: "List of semicolon separated test details formatted like: 'name,#tests,#errors,#skips,elapsed' corresponding to the [test-result-uris]."
     required: false
-  workflow-ref:
-    description: "The URI to the executing workflow YAML file.  This MUST include the [/blob/master] path segments which will be replaced with the current branch."
-    required: true
   send-on:
     description: "Optionally specifies a space separated list of test outcomes that will trigger the notification or one of: `always`, `test-success`, or `test-fail"
     required: false
