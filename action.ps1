@@ -34,26 +34,26 @@ Pop-Location
 
 # Implement the operation.
 
+# Fetch the inputs.
+
+$channel        = Get-ActionInput "channel"          $true
+$buildBranch    = Get-ActionInput "build-branch"     $false
+$buildConfig    = Get-ActionInput "build-config"     $false
+$buildCommit    = Get-ActionInput "build-commit"     $false
+$buildCommitUri = Get-ActionInput "build-commit-uri" $false
+$startTime      = Get-ActionInput "start-time"       $false
+$finishTime     = Get-ActionInput "finish-time"      $false
+$testSummary    = Get-ActionInput "test-summary"     $true
+$testOutcome    = Get-ActionInput "test-outcome"     $true
+$testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
+$testFilter     = Get-ActionInput "test-filter"      $false
+$testResultUris = Get-ActionInput "test-result-uris" $false
+$testResultInfo = Get-ActionInput "test-result-info" $false
+$workflowRef    = Get-ActionInput "workflow-ref"     $true
+$sendOn         = Get-ActionInput "send-on"          $true
+
 try
 {    
-    # Fetch the inputs.
-
-    $channel        = Get-ActionInput "channel"          $true
-    $buildBranch    = Get-ActionInput "build-branch"     $false
-    $buildConfig    = Get-ActionInput "build-config"     $false
-    $buildCommit    = Get-ActionInput "build-commit"     $false
-    $buildCommitUri = Get-ActionInput "build-commit-uri" $false
-    $startTime      = Get-ActionInput "start-time"       $false
-    $finishTime     = Get-ActionInput "finish-time"      $false
-    $testSummary    = Get-ActionInput "test-summary"     $true
-    $testOutcome    = Get-ActionInput "test-outcome"     $true
-    $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
-    $testFilter     = Get-ActionInput "test-filter"      $false
-    $testResultUris = Get-ActionInput "test-result-uris" $false
-    $testResultInfo = Get-ActionInput "test-result-info" $false
-    $workflowRef    = Get-ActionInput "workflow-ref"     $true
-    $sendOn         = Get-ActionInput "send-on"          $true
-
     if ([System.String]::IsNullOrEmpty($buildConfig))
     {
         $buildConfig = "-na-"
@@ -133,23 +133,6 @@ try
     # Determine the workflow run URI.
 
     $workflowRunUri = "$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
-
-    # Convert [$workflowRef] into the URI to referencing the correct workflow branch.  We're
-    # going to use the GITHUB_REF environment variable.  This includes the branch like:
-    #
-    #       refs/heads/master
-    #
-    # Note that the workflow may be executing on a different branch than the repo build.
-
-    if (!$workflowRef.Contains("/blob/master/"))
-    {
-        throw "[workflow-ref=$workflowRef] is missing '/blob/master/'."
-    }
-
-    $githubRef      = $env:GITHUB_REF
-    $lastSlashPos   = $githubRef.LastIndexOf("/")
-    $workflowBranch = $githubRef.Substring($lastSlashPos + 1)
-    $workflowUri    = $workflowRef.Replace("/blob/master/", "/blob/$workflowBranch/")
 
     # Determine the reason why the workflow was triggered based on the GITHUB_EVENT_NAME
     # and GITHUB_ACTOR environment variables.
@@ -305,8 +288,8 @@ try
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
     $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
     $card = $card.Replace("@test-filter", $testFilter)
-    $card = $card.Replace("@workflow-run-uri", $workflowRunUri)
-    $card = $card.Replace("@workflow-uri", $workflowUri)
+    $card = $card.Replace("@workflow-run-uri", GetWorkflowRunUri)
+    $card = $card.Replace("@workflow-uri", Get-WorkflowUri)
     $card = $card.Replace("@finish-time", $finishTime)
     $card = $card.Replace("@elapsed-time", $elapsedTime)
     $card = $card.Replace("@theme-color", $themeColor)
@@ -352,7 +335,7 @@ try
 @'
          {
            "name": "@test-project:",
-           "value": "@status-uri **@result-uri** - @elapsed pass: **@pass** fail: **@fail** skipped: @skip"
+           "value": "@status **@result-uri** - @elapsed pass: **@pass** fail: **@fail** skipped: @skip"
          }
 '@
                 $factTemplate = $factTemplate.Replace("@test-project", $name)
@@ -360,20 +343,20 @@ try
 
                 if ($errors -gt 0)
                 {
-                    $statusUri = $errorStatus
+                    $status = $errorStatus
                 }
                 elseif ($skips -gt 0)
                 {
-                    $statusUri = $warningStatus
+                    $status = $warningStatus
                 }
                 else
                 {
-                    $statusUri = $okStatus
+                    $status = $okStatus
                 }
 
                 # Replace the statistics related fact placeholders.
 
-                $factTemplate = $factTemplate.Replace("@status-uri", $statusUri)
+                $factTemplate = $factTemplate.Replace("@status", $status)
                 $factTemplate = $factTemplate.Replace("@elapsed", $elapsed)
                 $factTemplate = $factTemplate.Replace("@pass", $total - $errors - $skips)
                 $factTemplate = $factTemplate.Replace("@fail", $errors)
