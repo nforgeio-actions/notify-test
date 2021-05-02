@@ -313,7 +313,7 @@ try
             {
                 $resultUri = $resultUris[$i]
 
-                # Extract the statistics from the corresponding summary.
+                # Extract the details from the corresponding summary.
 
                 $details = $resultInfo[$i].Split(",")
                 $name    = $details[0]
