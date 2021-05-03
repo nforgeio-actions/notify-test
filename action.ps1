@@ -49,6 +49,7 @@ $testSuccess    = $(Get-ActionInput "test-success" $true) -eq "true"
 $testFilter     = Get-ActionInput "test-filter"      $false
 $testResultUris = Get-ActionInput "test-result-uris" $false
 $testResultInfo = Get-ActionInput "test-result-info" $false
+$testIssueUri   = Get-ActionInput "test-issue-uri"   $false
 $sendOn         = Get-ActionInput "send-on"          $true
 
 try
@@ -236,6 +237,10 @@ try
            "value": "@build-commit-uri"
          },
          {
+           "name": "Issue:",
+           "value": "@test-issue-uri"
+         },
+         {
            "name": "Runner:",
            "value": "@runner"
          },
@@ -286,6 +291,7 @@ try
     $card = $card.Replace("@build-branch", $buildBranch)
     $card = $card.Replace("@build-config", $buildConfig)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
+    $card = $card.Replace("@test-issue-uri", $testIssueUri)
     $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
     $card = $card.Replace("@test-filter", $testFilter)
     $card = $card.Replace("@workflow-run-uri", $workflowRunUri)
