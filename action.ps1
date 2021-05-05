@@ -132,7 +132,7 @@ try
 
     # Fetch the workflow and run run URIs.
 
-    $workflowUri    = Get-ActionWorkflowUri $env:workflow_path
+    $workflowUri    = Get-ActionWorkflowUri
     $workflowRunUri = Get-ActionWorkflowRunUri
 
     # Determine the reason why the workflow was triggered based on the GITHUB_EVENT_NAME
