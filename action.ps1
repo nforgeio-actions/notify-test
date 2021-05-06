@@ -41,6 +41,7 @@ $buildBranch    = Get-ActionInput "build-branch"     $false
 $buildConfig    = Get-ActionInput "build-config"     $false
 $buildCommit    = Get-ActionInput "build-commit"     $false
 $buildCommitUri = Get-ActionInput "build-commit-uri" $false
+$buildSuccess   = $*Get-ActionInput "build-success" $false) -eq "true"
 $startTime      = Get-ActionInput "start-time"       $false
 $finishTime     = Get-ActionInput "finish-time"      $false
 $testSummary    = Get-ActionInput "test-summary"     $true
@@ -51,6 +52,13 @@ $testResultUris = Get-ActionInput "test-result-uris" $false
 $testResultInfo = Get-ActionInput "test-result-info" $false
 $testIssueUri   = Get-ActionInput "test-issue-uri"   $false
 $sendOn         = Get-ActionInput "send-on"          $true
+
+# Don't sent the test notification when the build failed.
+
+if (!$buildSuccess)
+{
+    return;
+}
 
 try
 {    

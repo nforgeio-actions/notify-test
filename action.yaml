@@ -38,6 +38,10 @@ inputs:
   build-commit-uri:
     description: "Optionally specifies target repo commit URI"
     required: false
+  build-success:
+    description: "Optionally indicates whether the build succeeded"
+    required: false
+    default: "true"
   start-time:
     description: "Optionally indicates when the tests started (this must be formatted like: YYYY-MM-DD HH-MM:SSZ)"
     required: false
