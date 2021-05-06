@@ -52,7 +52,7 @@ inputs:
     description: "Identifies the test being performed"
     required: true
   test-outcome:
-    description: "Optionally specifies the build step outcome from [steps.BUILDSTEP.outcome], one of: 'success', 'failure', 'cancelled', or 'skipped'"
+    description: "Optionally specifies the build step outcome from [steps.BUILDSTEP.outcome], one of: [success failure cancelled skipped]"
     required: true
   test-success:
     description: "The build step's [success] output"
@@ -71,7 +71,7 @@ inputs:
     description: "Optionally specifies the URI for the test failure issue or comment"
     required: false
   send-on:
-    description: "Optionally specifies a space separated list of test outcomes that will trigger the notification or one of: `always`, `test-success`, or `test-fail"
+    description: "Optionally specifies a space separated list of test outcomes that will trigger the notification or one of: [always test-success test-fail success failure cancelled skipped]"
     required: false
     default: always
 runs:
