@@ -1,3 +1,4 @@
+#Requires -Version 7.0 -RunAsAdministrator
 #------------------------------------------------------------------------------
 # FILE:         action.ps1
 # CONTRIBUTOR:  Jeff Lill
