@@ -201,6 +201,13 @@ try
         $testOutcome = "TESTS FAILED"
     }
 
+    # Handle some empty values
+
+    if ([System.String]::IsNullOrEmpty($testIssueUri))
+    {
+        $testIssueUri = "-na-"
+    }
+
     # Format $testOutcome
 
     $testOutcome = "**$testOutcome**"
