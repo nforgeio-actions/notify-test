@@ -405,6 +405,8 @@ try
 
     # Insert the test result facts into the card.
 
+[System.IO.File]::WriteAllText("C:\Temp\card.json", $card)
+
     $card = $card.Replace("@result-facts", $resultFacts)
 
     # Post the card to Microsoft Teams.
