@@ -11,7 +11,7 @@
 #------------------------------------------------------------------------------
 # Sends a test related notification message to a Microsoft Teams channel URI.
     
-# Verify that we're running on a properly configured neonFORGE jobrunner 
+# Verify that we're running on a properly configured neonFORGE GitHub runner 
 # and import the deployment and action scripts from neonCLOUD.
 
 # NOTE: This assumes that the required [$NC_ROOT/Powershell/*.ps1] files
