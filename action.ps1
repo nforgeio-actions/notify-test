@@ -37,21 +37,22 @@ Pop-Location | Out-Null
 
 # Fetch the inputs.
 
-$channel        = Get-ActionInput "channel"          $true
-$buildBranch    = Get-ActionInput "build-branch"     $false
-$buildConfig    = Get-ActionInput "build-config"     $false
-$buildCommit    = Get-ActionInput "build-commit"     $false
-$buildCommitUri = Get-ActionInput "build-commit-uri" $false
-$startTime      = Get-ActionInput "start-time"       $false
-$finishTime     = Get-ActionInput "finish-time"      $false
-$testSummary    = Get-ActionInput "test-summary"     $true
-$testOutcome    = Get-ActionInput "test-outcome"     $true
+$channel        = Get-ActionInput     "channel"          $true
+$buildBranch    = Get-ActionInput     "build-branch"     $false
+$buildConfig    = Get-ActionInput     "build-config"     $false
+$buildCommit    = Get-ActionInput     "build-commit"     $false
+$buildCommitUri = Get-ActionInput     "build-commit-uri" $false
+$buildLogUri    = Get-ActionInput     "build-log-uri"    $false
+$startTime      = Get-ActionInput     "start-time"       $false
+$finishTime     = Get-ActionInput     "finish-time"      $false
+$testSummary    = Get-ActionInput     "test-summary"     $true
+$testOutcome    = Get-ActionInput     "test-outcome"     $true
 $testSuccess    = Get-ActionInputBool "test-success" $true
-$testFilter     = Get-ActionInput "test-filter"      $false
-$testResultUris = Get-ActionInput "test-result-uris" $false
-$testResultInfo = Get-ActionInput "test-result-info" $false
-$testIssueUri   = Get-ActionInput "test-issue-uri"   $false
-$sendOn         = Get-ActionInput "send-on"          $true
+$testFilter     = Get-ActionInput     "test-filter"      $false
+$testResultUris = Get-ActionInput     "test-result-uris" $false
+$testResultInfo = Get-ActionInput     "test-result-info" $false
+$testIssueUri   = Get-ActionInput     "test-issue-uri"   $false
+$sendOn         = Get-ActionInput     "send-on"          $true
 
 try
 {    
@@ -62,6 +63,11 @@ try
     else
     {
         $buildConfig = $buildConfig.ToLower()
+    }
+
+    if ([System.String]::IsNullOrEmpty($buildLogUri))
+    {
+        $buildLogUri = "-na-"
     }
 
     if ([System.String]::IsNullOrEmpty($testFilter))
@@ -245,6 +251,10 @@ try
            "value": "@build-commit-uri"
          },
          {
+           "name": "Log:",
+           "value": "@build-log-uri"
+         },
+         {
            "name": "Issue:",
            "value": "@test-issue-uri"
          },
@@ -299,6 +309,7 @@ try
     $card = $card.Replace("@build-branch", $buildBranch)
     $card = $card.Replace("@build-config", $buildConfig)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
+    $card = $card.Replace("@build-log-uri", $buildLogUri)
     $card = $card.Replace("@test-issue-uri", $testIssueUri)
     $card = $card.Replace("@test-outcome", $testOutcome.ToUpper())
     $card = $card.Replace("@test-filter", $testFilter)

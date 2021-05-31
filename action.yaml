@@ -38,6 +38,10 @@ inputs:
   build-commit-uri:
     description: "Optionally specifies target repo commit URI"
     required: false
+  build-log-uri:
+    description: "Optionally specifies the URI to the build log"
+    required: false
+    default: ""
   start-time:
     description: "Optionally indicates when the tests started (this must be formatted like: YYYY-MM-DD HH-MM:SSZ)"
     required: false
