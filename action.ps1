@@ -56,6 +56,9 @@ $sendOn         = Get-ActionInput     "send-on"          $true
 
 try
 {    
+    $runner = Get-ProfileValue "runner.name"
+    $runner = $runner.ToUpper()
+
     if ([System.String]::IsNullOrEmpty($buildConfig))
     {
         $buildConfig = "-na-"
@@ -305,7 +308,7 @@ try
 '@
     $card = $card.Replace("@test-summary", $testSummary)
     $card = $card.Replace("@trigger", $trigger)
-    $card = $card.Replace("@runner", $env:COMPUTERNAME)
+    $card = $card.Replace("@runner", @runner)
     $card = $card.Replace("@build-branch", $buildBranch)
     $card = $card.Replace("@build-config", $buildConfig)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
