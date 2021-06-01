@@ -20,7 +20,7 @@
 # Channel URIs are secrets and should be persisted to the 1Password account for the user
 # and obtained at runtime via the noenFORGE deployment mechanisms.
 
-name: teams-notify-test
+name: notify-test
 description: "Sends a build related message to a Microsoft Teams channel URI"
 inputs:
   channel:
