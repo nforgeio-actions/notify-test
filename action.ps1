@@ -308,7 +308,7 @@ try
 '@
     $card = $card.Replace("@test-summary", $testSummary)
     $card = $card.Replace("@trigger", $trigger)
-    $card = $card.Replace("@runner", @runner)
+    $card = $card.Replace("@runner", $runner)
     $card = $card.Replace("@build-branch", $buildBranch)
     $card = $card.Replace("@build-config", $buildConfig)
     $card = $card.Replace("@build-commit-uri", $buildCommitUri)
