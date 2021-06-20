@@ -71,7 +71,7 @@ inputs:
     description: "Optionally specifies the URI for the test failure issue or comment"
     required: false
   send-on:
-    description: "Optionally specifies a space separated list of test outcomes that will trigger the notification or one of: [always test-success test-fail success failure cancelled skipped]"
+    description: "Optionally specifies a space separated list of test outcomes that will trigger the notification (always test-success test-fail success failure cancelled skipped)"
     required: false
     default: always
 runs:
