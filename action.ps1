@@ -341,14 +341,15 @@ try
             {
                 $resultUri = $resultUris[$i]
 
-                # Extract the details from the corresponding summary.
+                # Extract the details from the summary.
 
-                $details = $resultInfo[$i].Split(",")
-                $name    = $details[0]
-                $total   = [int]$details[1]
-                $errors  = [int]$details[2]
-                $skips   = [int]$details[3]
-                $elapsed = $details[4]
+                $details   = $resultInfo[$i].Split(",")
+                $name      = $details[0]
+                $total     = [int]$details[1]
+                $errors    = [int]$details[2]
+                $skips     = [int]$details[3]
+                $elapsed   = $details[4]
+                $framework = $details[5]
 
                 # Skip projects that performed no tests.
 
@@ -363,7 +364,7 @@ try
 @'
          {
            "name": "@test-project:",
-           "value": "@status **@result-uri** - @elapsed pass: **@pass** fail: **@fail** skipped: @skip"
+           "value": "@status **@result-uri** - @elapsed pass: **@pass** fail: **@fail** skipped: @skip [@framework]"
          }
 '@
                 $factTemplate = $factTemplate.Replace("@test-project", $name)
@@ -389,6 +390,7 @@ try
                 $factTemplate = $factTemplate.Replace("@pass", $total - $errors - $skips)
                 $factTemplate = $factTemplate.Replace("@fail", $errors)
                 $factTemplate = $factTemplate.Replace("@skip", $skips)
+                $factTemplate = $factTemplate.Replace("@framework", $framework)
 
                 # Append the new test fact to the result facts that we'll
                 # insert into the card below.

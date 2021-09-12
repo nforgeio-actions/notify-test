@@ -65,7 +65,7 @@ inputs:
     description: "Optionally specifies the list of semicolon separated markdown formatted URIs to the test results"
     required: false
   test-result-info:
-    description: "Optionally specifies the list of semicolon separated test details formatted like: 'name,#tests,#errors,#skips,elapsed' corresponding to the [test-result-uris]."
+    description: "Optionally specifies the list of semicolon separated test details formatted like: 'name,#tests,#errors,#skips,elapsed,framework' corresponding to the [test-result-uris]."
     required: false
   test-issue-uri:
     description: "Optionally specifies the URI for the test failure issue or comment"
