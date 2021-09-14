@@ -174,7 +174,7 @@ try
 
     $themeColor = "ff0000" # green
 
-    Switch ($testOutcome)
+    switch ($testOutcome)
     {
         "success"
         {
@@ -337,7 +337,7 @@ try
 
         if ($resultUris.Length -eq $resultInfo.Length)
         {
-            For ($i = 0 ; $i -lt $resultUris.Length ; $i++)
+            for ($i = 0 ; $i -lt $resultUris.Length ; $i++)
             {
                 $resultUri = $resultUris[$i]
 
@@ -355,7 +355,7 @@ try
 
                 if ($total -eq 0)
                 {
-                    Continue
+                    continue
                 }
 
                 # Initialize the fact JSON for the test project.
