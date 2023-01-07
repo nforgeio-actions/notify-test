@@ -172,7 +172,7 @@ try
 
     # Set the theme color based on the build outcome/success inputs.
 
-    $themeColor = "ff0000" # green
+    $themeColor = "ff0000" # red
 
     switch ($testOutcome)
     {
@@ -229,7 +229,7 @@ try
   "sections": [
     {
       "activityTitle": "@test-summary",
-      "activitySubtitle": "@trigger",
+      "activitySubtitle": "@trigger"
     },
     {
       "facts": [
